@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Appenders>
+  	<Console name="STDOUT" target="SYSTEM_OUT">
+  		<PatternLayout pattern="%5p [%t] - %m%n"/>
+  	</Console>
+  </Appenders>
+  <Loggers>
+    <Logger name="com.example.gnu.Mapper" level="TRACE">
+		<Appender-ref ref="STDOUT"></Appender-ref>
+    </Logger>
+    <Root level="INFO">
+		<Appender-ref ref="STDOUT"></Appender-ref>
+    </Root>
+  </Loggers>
+</Configuration>
