@@ -1,4 +1,4 @@
-package com.example.gnu.SecurityTest.config;
+package com.example.gnu.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

@@ -5,29 +5,22 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-public class MyUser extends User {
-	public MyUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-		super(username, password, authorities);
-	}
-	private static final long serialVersionUID = -4172918061717915154L;
-	private String userId;
-    private Collection<GrantedAuthority> authorities;
-
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	@Override
-	public String toString() {
-		return "MyUser [userId=" + userId + "]";
+public class MyUser extends User{ 
+	private static final long serialVersionUID = 1798998709204672720L;
+	private String email;
+	public MyUser(String username, String password, String email, boolean enabled, boolean accountNonExpired,
+			boolean credentialsNonExpired, boolean accountNonLocked,
+			Collection<? extends GrantedAuthority> authorities) {
+		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+		this.email = email;
+		// TODO Auto-generated constructor stub
 	}
 	
-	@Override
-	public Collection<GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return authorities;
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 	

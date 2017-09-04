@@ -2,10 +2,13 @@
 <Configuration>
   <Appenders>
   	<Console name="STDOUT" target="SYSTEM_OUT">
-  		<PatternLayout pattern="%5p [%t] - %m%n"/>
+  		<PatternLayout pattern="%5p [%t] [%C] - %m%n"/>
   	</Console>
   </Appenders>
   <Loggers>
+  	<Logger name="org.h2.jdbc" level="TRACE">
+  		<Appender-ref ref="STDOUT"></Appender-ref>
+  	</Logger>
     <Logger name="com.example.gnu.Mapper" level="TRACE">
 		<Appender-ref ref="STDOUT"></Appender-ref>
     </Logger>

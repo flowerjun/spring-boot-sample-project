@@ -1,4 +1,4 @@
-package com.example.gnu.SecurityTest.config;
+package com.example.gnu.config;
 
 import javax.sql.DataSource;
 
