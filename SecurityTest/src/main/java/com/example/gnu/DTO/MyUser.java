@@ -20,6 +20,10 @@ public class MyUser implements UserDetails{
 		authorities.add(grant);
 	}
 	
+	public void purgeCredential(){
+		this.password = null;
+	}
+	
 	@Override
 	public Collection<SimpleGrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub

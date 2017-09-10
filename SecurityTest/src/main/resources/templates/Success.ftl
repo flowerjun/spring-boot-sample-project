@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>Login success</h1>
+<p>Welcome ${name }, you are ${role }</p>
 <a href="/logout">Logout</a>
 </body>
 </html>
