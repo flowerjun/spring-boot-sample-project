@@ -10,7 +10,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.example.gnu.DAO.UserDAO;
+import com.example.gnu.DTO.MyUser;
 
 @Configuration
 @EnableWebSecurity
@@ -18,19 +25,21 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecutiryConfigurerProd extends WebSecurityConfigurerAdapter{
 	@Autowired
 	DataSource datasource;
+	@Autowired
+	UserDAO userDao;
 	
 	private final String[] ALLOW_LIST = new String[]{
-			"/h2-console/**", "/loginme", "/logout", "/error/**"};
+			"/h2-console/**", "/loginme", "/logout", "/error/**", "/loginCheck"};
 	
 	public SecutiryConfigurerProd() {
 		// TODO Auto-generated constructor stub
 		System.out.println("Prod mode");
 	}
-	
+	@SuppressWarnings("unused")
 	private void inMemoryAuthBuilder(AuthenticationManagerBuilder auth) throws Exception{
 		auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
 	}
-	
+	@SuppressWarnings("unused")
 	private void jdbcAuthBuilder(AuthenticationManagerBuilder auth) throws Exception{
 		auth.jdbcAuthentication().dataSource(datasource)
 		.usersByUsernameQuery("SELECT USERID, PASSWORD,ENABLED "
@@ -47,7 +56,21 @@ public class SecutiryConfigurerProd extends WebSecurityConfigurerAdapter{
 		// TODO Auto-generated method stub
 		super.configure(auth);
 		// inMemoryAuthBuilder(auth);
-		jdbcAuthBuilder(auth);
+		// jdbcAuthBuilder(auth);
+		auth.userDetailsService(new UserDetailsService() {
+			
+			@Override
+			public UserDetails loadUserByUsername(String arg0) throws UsernameNotFoundException {
+				MyUser user = userDao.findUserByUsername(arg0);
+				if(null == user){
+					throw new UsernameNotFoundException("User not found");
+				} else {
+					String authority = userDao.findAuthorityByUsername(arg0);
+					user.addAuthorities(authority);
+					return user;
+				}
+			}
+		});
 	}
 	@Override
 	public void configure(WebSecurity web) throws Exception {
@@ -58,18 +81,16 @@ public class SecutiryConfigurerProd extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception { 	// 리소스 레벨 보안, namespace 구분의 용도로 활용
-		
 		http.authorizeRequests().antMatchers(ALLOW_LIST).permitAll()
 		.antMatchers("/admin/**").hasAuthority("ADMIN")
-		.anyRequest().authenticated()
+		.anyRequest().authenticated() // 권한이 있으면 다른 페이지들도 접근 가능
 		.and().formLogin().loginPage("/loginme")
+		.loginProcessingUrl("/loginCheck")
+		.defaultSuccessUrl("/success",true).failureUrl("/loginme?error=true")
 		.usernameParameter("username")
 		.passwordParameter("password")
-		.defaultSuccessUrl("/success",true).failureUrl("/loginme?error=true")
-		.loginProcessingUrl("/loginCheck")
 		.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))
-		.invalidateHttpSession(true).deleteCookies("JSESSIONID").logoutSuccessUrl("/loginme?logout=true");
-		// http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-		//http.csrf().disable();
+		.invalidateHttpSession(true).deleteCookies("JSESSIONID").logoutSuccessUrl("/loginme?logout=true")
+		.and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 	}	
 }

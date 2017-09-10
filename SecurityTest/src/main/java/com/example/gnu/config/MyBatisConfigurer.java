@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@MapperScan("com.example.gnu.Mapper")
+@MapperScan("com.example.gnu.DAO")
 public class MyBatisConfigurer{
 	
 	@Autowired

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,17 +16,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.gnu.DAO.UserDAO;
-
 @Controller
 public class MyController {
 	Logger logger = LogManager.getLogger();
 	@Autowired
-	UserDAO userDao;
+	ApplicationContext context;
 	@GetMapping("/hello")
 	public String hello(String name, Model model){
 		model.addAttribute("name", name);
 		return "Hello";
+	}
+	
+	@GetMapping("/filtered")
+	public @ResponseBody void f(){
+		System.out.println(context.getBean("filterClass"));
+		System.out.println(context.getBean("exampleFilter"));
+		System.out.println("filtered");
+	}
+	
+	@GetMapping("/nofilter")
+	public @ResponseBody void n(){
+		System.out.println("no filter");
 	}
 	
 	@GetMapping("/loginme")

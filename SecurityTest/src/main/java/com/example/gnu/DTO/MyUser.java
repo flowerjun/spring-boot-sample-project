@@ -1,19 +1,59 @@
 package com.example.gnu.DTO;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
-public class MyUser extends User{ 
+@Component
+public class MyUser implements UserDetails{ 
 	private static final long serialVersionUID = 1798998709204672720L;
+	private String userid;
+	private String password;
 	private String email;
-	public MyUser(String username, String password, String email, boolean enabled, boolean accountNonExpired,
-			boolean credentialsNonExpired, boolean accountNonLocked,
-			Collection<? extends GrantedAuthority> authorities) {
-		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-		this.email = email;
-		// TODO Auto-generated constructor stub
+	private Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+	
+	public void addAuthorities(String authority) {
+		SimpleGrantedAuthority grant = new SimpleGrantedAuthority(authority);
+		authorities.add(grant);
+	}
+	
+	@Override
+	public Collection<SimpleGrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return authorities;
+	}
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return password;
+	}
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return userid;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 	
 	public String getEmail() {
@@ -22,6 +62,10 @@ public class MyUser extends User{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "MyUser [username=" + userid + ", password=" + password + ", email=" + email
+				+ ", authorities=" + authorities + "]";
+	}
 }

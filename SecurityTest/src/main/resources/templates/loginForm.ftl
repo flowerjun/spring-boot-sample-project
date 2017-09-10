@@ -25,8 +25,7 @@
     <button type="submit">Sign in</button>
 	<#if error == "true">
 	<p>ID or Password is incorrect</p>
-	</#if>
-	<#if logout == "true">
+	<#elseif logout == "true">
 	<p>You successfully logout</p>
 	</#if>
 </form>
