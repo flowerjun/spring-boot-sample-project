@@ -7,6 +7,7 @@
 <body>
 <h1>Login success</h1>
 <p>Welcome ${name }, you are ${role }</p>
+<p><a href="/fileUpload">File upload example</a></p>
 <a href="/logout">Logout</a>
 </body>
 </html>
