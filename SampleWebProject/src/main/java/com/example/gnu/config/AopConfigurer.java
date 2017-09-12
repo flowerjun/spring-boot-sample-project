@@ -8,7 +8,6 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +18,7 @@ import com.example.gnu.exception.InvalidHeaderException;
 
 @Component
 @Aspect
-public class AopController {
+public class AopConfigurer {
 	@Autowired
 	FileController fileController;
 	
